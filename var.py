@@ -1,0 +1,2 @@
+'''Variables globales'''
+global ui

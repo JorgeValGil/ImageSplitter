@@ -1,0 +1,5 @@
+<RCC>
+  <qresource prefix="eliminar">
+    <file>eliminar.png</file>
+  </qresource>
+</RCC>
