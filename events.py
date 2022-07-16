@@ -1,17 +1,19 @@
-import var, sys
+from pathlib import Path
 from PIL import Image
 from PyQt5 import QtWidgets
-from pathlib import Path
+import sys
+import var
 
-class Eventos():
 
-    def Salir(self):
+class Eventos:
+
+    def salir(self):
         try:
             sys.exit()
         except Exception as error:
             print("Error %s: " % str(error))
 
-    def Split(self, image_path, cols, rows, destination_path):
+    def split(self, image_path, cols, rows, destination_path):
         im = Image.open(image_path)
         im_width, im_height = im.size
         col_width = int(im_width / cols)
@@ -22,34 +24,34 @@ class Eventos():
                 box = (i * col_width, j * row_height, i * col_width +
                        col_width, j * row_height + row_height)
                 im_box = im.crop(box)
-                out_path = destination_path +"/"+ Path(image_path).stem + "-" + str(j) + "-" + str(i) + "." + image_path.split(".")[1]
+                out_path = destination_path + "/" + Path(image_path).stem + \
+                           "-" + str(j) + "-" + str(i) + "." + image_path.split(".")[1]
                 im_box.save(out_path)
                 n += 1
-        var.ui.labelstatusbar.setText('GENERADAS '+str(n)+' IMÁGENES')
+        var.ui.labelstatusbar.setText('GENERADAS ' + str(n) + ' IMÁGENES')
 
-
-    def GenerarImagenes(self):
+    def generar_imagenes(self):
         if var.ui.lineEdit_imagen.text() != "":
             ventana_carpeta = QtWidgets.QFileDialog
             carpeta_destino = ventana_carpeta.getExistingDirectory(None, 'Selecciona la carpeta de destino')
             if ventana_carpeta.Accepted and carpeta_destino != '':
-                Eventos.Split(self, var.ui.lineEdit_imagen.text(), var.ui.spinBox_columnas.value(), var.ui.spinBox_filas.value(), carpeta_destino)
+                Eventos.split(self, var.ui.lineEdit_imagen.text(), var.ui.spinBox_columnas.value(),
+                              var.ui.spinBox_filas.value(), carpeta_destino)
         else:
             var.ui.labelstatusbar.setText('DEBES SELECCIONAR LA IMAGEN')
 
-    def SeleccionarImagen(self):
-        '''Función que selecciona la imagen.
-        Se abre una ventana para seleccioanr la imagen y se guarda la ruta en un campo de texto.'''
+    def seleccionar_imagen(self):
+        """Función que selecciona la imagen.
+        Se abre una ventana para seleccioanr la imagen y se guarda la ruta en un campo de texto."""
         try:
             ventana_imagen = QtWidgets.QFileDialog
             filename, filtro = ventana_imagen.getOpenFileName(None, 'Seleccionar imagen', "Imagen",
-                                                                 "Imagen (*.png *.jpg)")
+                                                              "Imagen (*.png *.jpg)")
             if ventana_imagen.Accepted and filename != '':
                 var.ui.lineEdit_imagen.setText(filename)
         except Exception as error:
             print("Error %s: " % str(error))
 
-    def LimpiarImagen(self):
-        '''Función que limpia el campo de texto de la imagen.'''
+    def limpiar_imagen(self):
+        """Función que limpia el campo de texto de la imagen."""
         var.ui.lineEdit_imagen.setText("")
-
